@@ -109,16 +109,32 @@ class Emitter:
         p.center_y = self.center_y + p.center_y
         self._particles.append(p)
 
+    def _emit_batch_original(self, emit_count):
+        idx = 0
+        particles = []
+        while idx < emit_count:
+            particles.append(self.particle_factory(self))
+            idx += 1
+        self._particles.append_batch(particles)
+
+    def _emit_batch_preallocated_array(self, emit_count):
+        """Untested if this actually helps"""
+        particles = [None] * emit_count
+        for i in range(emit_count):
+            particles[i] = self.particle_factory(self)
+        self._particles.append_batch(particles)
+
+    _emit_batch = _emit_batch_original
+
     def update(self):
         emit_count = self.rate_factory.how_many(1/60)
-        for _ in range(emit_count):
-            self._emit()
+        self._emit_batch(emit_count)
         self._particles.update()
         particles_to_reap = [p for p in self._particles if p.can_reap()]
         # if len(particles_to_reap) > 0:
         #     print("particles to reap {}".format(len(particles_to_reap)))
-        for dead_particle in particles_to_reap:
-            dead_particle.kill()
+        if len(particles_to_reap) > 0:
+            self._particles.remove_batch(particles_to_reap)
 
         # Need to iterate and get list of dead particles. then delete those from sprite list (while not iterating over sprite list.
         # sweep and update all particles. then get the list of those that are ready to be reaped (do i return this as part of update() so that I don't have to iterate twice?). Or is this early optimization?

@@ -284,6 +284,17 @@ class SpriteList(Generic[T]):
         if self.use_spatial_hash:
             self.spatial_hash.insert_object_for_box(item)
 
+    def append_batch(self, items):
+        # Optimize by getting rid of an individual function call for calls for large numbers of items
+        for item in items:
+            idx = len(self.sprite_list)
+            self.sprite_list.append(item)
+            self.sprite_idx[item] = idx
+            item.register_sprite_list(self) # can I unroll this to get rid of function call overhead?
+            if self.use_spatial_hash:
+                self.spatial_hash.insert_object_for_box(item)
+        self.vao = None
+
     def recalculate_spatial_hash(self, item: T):
         if self.use_spatial_hash:
             self.spatial_hash.remove_object(item)
@@ -302,13 +313,58 @@ class SpriteList(Generic[T]):
         self.sprite_list.remove(item)
 
         # Rebuild index list
-        self.sprite_idx[item] = dict()
+        self.sprite_idx[item] = dict()  # this might be unnecessary
         for idx, sprite in enumerate(self.sprite_list):
             self.sprite_idx[sprite] = idx
 
         self.vao = None
         if self.use_spatial_hash:
             self.spatial_hash.remove_object(item)
+
+    def remove_batch(self, items):
+        # BUG NOTE: this doesn't handle the case where a sprite is in multiple lists. Need to add that
+
+        # remove sprites from list
+        for item in items:
+            self.sprite_list.remove(item)
+        # self.sprite_idx[item] = dict()  # this might be unnecessary
+        for idx, sprite in enumerate(self.sprite_list):
+            self.sprite_idx[sprite] = idx
+
+        self.vao = None
+        if self.use_spatial_hash:
+            self.spatial_hash.remove_object(item)
+
+    # def removeOLD(self, item: T):
+    #     """
+    #     Remove a specific sprite from the list.
+    #     """
+    #     self.sprite_list.remove(item)
+    #
+    #     # approach #1 (original implementation) Rebuild index list
+    #     self.sprite_idx[item] = dict()  # this might be unnecessary
+    #     for idx, sprite in enumerate(self.sprite_list):
+    #         self.sprite_idx[sprite] = idx
+    #     # this allows you to look up the index of an item in the list. What is this used for?
+    #     # It looks like the indexes are used to maintain a parallel list (sprite_data). Can
+    #     # I change the data structures (store the parallel arrays in a data structure so that
+    #     # I don't have to maintain indexes to keep them in sync?  Or, maybe just forget about
+    #     # performance issues and just acknowledge that large spawning and reaping will cause hitches.
+    #     # Just work on demonstrating what the client API could look like, and then can dialog
+    #     # on the implementation with a PR. Plus I get to focus on what I like... making stuff look cool.
+    #
+    #     # approach #2 - dict comprehension
+    #     # self.sprite_idx = {idx:s for (idx,s) in enumerate(self.sprite_list)}
+    #
+    #     # approach #3 - don't use enumerator
+    #     # idx = 0
+    #     # for sprite in self.sprite_list:
+    #     #     self.sprite_idx[sprite] = idx
+    #     #     idx += idx
+    #
+    #     self.vao = None
+    #     if self.use_spatial_hash:
+    #         self.spatial_hash.remove_object(item)
 
     def update(self):
         """
