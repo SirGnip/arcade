@@ -21,6 +21,8 @@ from arcade.draw_commands import *
 from arcade.buffered_draw_commands import *
 from arcade.geometry import *
 from arcade.physics_engines import *
+from arcade.emitter import *
+from arcade.particle import *
 from arcade.sound import *
 from arcade.sprite import *
 from arcade.sprite_list import *
