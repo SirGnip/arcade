@@ -64,9 +64,8 @@ def rand_vec_spread_deg(angle: float, half_angle_spread: float, length: float):
     return v
 
 
-
-########## EmitterRate: control rate of emitting and duration of emitting
-class EmitterRate(object):
+########## Classes a client uses to configure an Emitter. Controls the rate of emitting and the duration of emitting
+class EmitterController:
     def how_many(self, delta_time: float) -> int:
         raise NotImplemented("EmitterRate.how_many must be implemented")
 
@@ -74,7 +73,7 @@ class EmitterRate(object):
         raise NotImplemented("EmitterRate.is_complete must be implemented")
 
 
-class BurstEmit(EmitterRate):
+class EmitterBurst(EmitterController):
     """Emits particles in one burst"""
     def __init__(self, count: int):
         self._is_complete = False
@@ -91,7 +90,7 @@ class BurstEmit(EmitterRate):
 
 
 # TODO: reduce code duplication of "carryover_time" logic
-class RateEmit(EmitterRate):
+class EmitterInterval(EmitterController):
     """Defines rate of spawning for an Emitter. No duration."""
     def __init__(self, emit_interval: float):
         self._emit_interval = emit_interval
@@ -109,7 +108,7 @@ class RateEmit(EmitterRate):
         return False
 
 
-class RateWithCount(EmitterRate):
+class EmitterIntervalWithCount(EmitterController):
     """Emits particles at the given interval, ending after emitting the given number of particles"""
     def __init__(self, emit_interval: float, particle_count: int):
         self._emit_interval = emit_interval
@@ -129,7 +128,7 @@ class RateWithCount(EmitterRate):
         return self._count_remaining <= 0
 
 
-class RateWithTime(EmitterRate):
+class EmitterIntervalWithTime(EmitterController):
     """Emits particles at the given interval, ending after given number of seconds"""
     def __init__(self, emit_interval: float, lifetime: float):
         self._emit_interval = emit_interval
@@ -154,8 +153,9 @@ class RateWithTime(EmitterRate):
 
 
 ########## Emitter
-class Emitter(object):
-    def __init__(self, pos: Vec2d, rate_factory: EmitterRate, particle_factory: Callable[[arcade.Sprite], Particle]):
+class Emitter:
+    def __init__(self, pos: Vec2d, rate_factory: EmitterController, particle_factory: Callable[["Emitter"], Particle]):
+        # Note Self-reference with type annotations: https://www.python.org/dev/peps/pep-0484/#the-problem-of-forward-declarations
         # super().__init__(filename=None, center_x=x, center_y=y)
         self.center_x = pos.x
         self.center_y = pos.y

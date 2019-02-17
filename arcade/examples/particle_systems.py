@@ -22,7 +22,7 @@ def emitter1():
     """basic burst emitter"""
     return emitter1.__doc__, arcade.Emitter(
         Vec2d(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2),
-        arcade.BurstEmit(3000),
+        arcade.EmitterBurst(3000),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          Vec2d(emitter.center_x, emitter.center_y),
                                          arcade.rand_in_circle(Vec2d.zero(), 2),
@@ -35,7 +35,7 @@ def emitter1A():
     """basic burst emitter with variable lifetimes"""
     return emitter1A.__doc__, arcade.Emitter(
         Vec2d(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2),
-        arcade.BurstEmit(3000),
+        arcade.EmitterBurst(3000),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          Vec2d(emitter.center_x, emitter.center_y),
                                          arcade.rand_in_circle(Vec2d.zero(), 2),
@@ -61,7 +61,7 @@ def emitter1a():
     vec_func = lambda: arcade.rand_vec_spread_deg(90, 45, random.uniform(0.1, 2.0))
     return emitter1a.__doc__, arcade.Emitter(
         center,
-        arcade.BurstEmit(500),
+        arcade.EmitterBurst(500),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          center,
                                          vec_func(),
@@ -76,7 +76,7 @@ def emitter1b():
     pos_func = lambda: arcade.rand_in_circle(center, 100)
     return emitter1b.__doc__, arcade.Emitter(
         center,
-        arcade.BurstEmit(500),
+        arcade.EmitterBurst(500),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          pos_func(),
                                          Vec2d(random.uniform(-0.2, 0.2), random.uniform(-0.2, 0.2)),
@@ -91,7 +91,7 @@ def emitter1c():
     pos_func = lambda: arcade.rand_on_line(Vec2d(0, 0), Vec2d(SCREEN_WIDTH, SCREEN_HEIGHT))
     return emitter1c.__doc__, arcade.Emitter(
         center,
-        arcade.BurstEmit(500),
+        arcade.EmitterBurst(500),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          pos_func(),
                                          Vec2d(random.uniform(-0.2, 0.2), random.uniform(-0.2, 0.2)),
@@ -106,7 +106,7 @@ def emitter1d():
     pos_func = lambda: arcade.rand_on_circle(center, 200)
     return emitter1d.__doc__, arcade.Emitter(
         center,
-        arcade.BurstEmit(500),
+        arcade.EmitterBurst(500),
         lambda emitter: arcade.LifetimeParticle("images/pool_cue_ball.png",
                                          pos_func(),
                                          Vec2d(random.uniform(-0.2, 0.2), random.uniform(-0.2, 0.2)),
@@ -119,7 +119,7 @@ def emitter2():
     """spawn only 5"""
     return emitter2.__doc__, arcade.Emitter(
         Vec2d(200, 200),
-        arcade.RateWithCount(0.3, 5),
+        arcade.EmitterIntervalWithCount(0.3, 5),
         lambda src_emitter: arcade.LifetimeParticle("images/bumper.png",
                                              Vec2d(src_emitter.center_x, src_emitter.center_y),
                                              Vec2d(random.uniform(-1, 1), random.uniform(-1, 1)),
@@ -132,7 +132,7 @@ def emitter3():
     """spawn and fade"""
     return emitter3.__doc__, arcade.Emitter(
         Vec2d(200, 200),
-        arcade.RateWithTime(.03, 1.5),
+        arcade.EmitterIntervalWithTime(.03, 1.5),
         lambda emitter: arcade.FadeParticle("images/bumper.png",
                                      Vec2d(emitter.center_x, emitter.center_y),
                                      Vec2d(random.uniform(-1, 1), random.uniform(-1, 1)),
@@ -148,7 +148,7 @@ def emitter4():
     vel_func = lambda: arcade.rand_on_circle(Vec2d.zero(), 1)
     return emitter4.__doc__, arcade.Emitter(
         center,
-        arcade.RateWithTime(.05, 5.0),
+        arcade.EmitterIntervalWithTime(.05, 5.0),
         lambda emitter: arcade.FadeParticle(image_chooser(),
                                      Vec2d(emitter.center_x, emitter.center_y),
                                      vel_func(),
