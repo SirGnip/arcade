@@ -17,10 +17,10 @@ def vec_lerp(v1: Vec2d, v2: Vec2d, u: float) -> Vec2d:
         lerp(v1.y, v2.y, u)
     )
 
-def rand_in_rect(pos: Vec2d, width: float, height: float) -> Vec2d:
+def rand_in_rect(bottom_left: Vec2d, width: float, height: float) -> Vec2d:
     return Vec2d(
-        random.uniform(pos.x, pos.x + width),
-        random.uniform(pos.y, pos.y + height)
+        random.uniform(bottom_left.x, bottom_left.x + width),
+        random.uniform(bottom_left.y, bottom_left.y + height)
     )
 
 def rand_in_circle(center: Vec2d, radius: float) -> Vec2d:
@@ -52,15 +52,22 @@ def rand_on_line(pos1: Vec2d, pos2: Vec2d) -> Vec2d:
 def rand_angle_360_deg():
     return random.uniform(0.0, 360.0)
 
-def rand_angle_spread_deg(angle: float, half_angle_spread: float):
+def rand_angle_spread_deg(angle: float, half_angle_spread: float) -> float:
     s = random.uniform(-half_angle_spread, half_angle_spread)
     return angle + s
 
-def rand_vec_spread_deg(angle: float, half_angle_spread: float, length: float):
+def rand_vec_spread_deg(angle: float, half_angle_spread: float, length: float) -> Vec2d:
     a = rand_angle_spread_deg(angle, half_angle_spread)
     v = Vec2d().ones()
     v.length = length
     v.angle_degrees = a
+    return v
+
+def rand_vec_magnitude(angle: float, lo_magnitude: float, hi_magnitude: float) -> Vec2d:
+    mag = random.uniform(lo_magnitude, hi_magnitude)
+    v = Vec2d().ones()
+    v.length = mag
+    v.angle_degrees = angle
     return v
 
 
@@ -91,7 +98,7 @@ class EmitterBurst(EmitterController):
 
 # TODO: reduce code duplication of "carryover_time" logic
 class EmitterInterval(EmitterController):
-    """Defines rate of spawning for an Emitter. No duration."""
+    """Defines rate of spawning for an Emitter. No duration so will emit indefinitely."""
     def __init__(self, emit_interval: float):
         self._emit_interval = emit_interval
         self._carryover_time = 0.0

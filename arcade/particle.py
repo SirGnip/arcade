@@ -23,14 +23,13 @@ class EternalParticle(Particle):
         self.change_angle = change_angle
         self.alpha = alpha
 
+    def can_reap(self):
+        return False
 
-PID = 0
+
 class LifetimeParticle(Particle):
     def __init__(self, filename, pos: Vec2d, vel: Vec2d, angle: float, change_angle: float, scale: float, alpha: int, lifetime: float):
-        global PID
         super().__init__(filename, scale=scale)
-        self.pid = PID
-        PID += 1
         self.center_x = pos.x
         self.center_y = pos.y
         self.change_x = vel.x
