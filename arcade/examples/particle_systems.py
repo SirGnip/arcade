@@ -11,12 +11,13 @@ import pyglet
 from pymunk import Vec2d
 import random
 import frametime_plotter
+import math
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Particle - sprite list class driven"
 QUIET_BETWEEN_SPAWNS = 0.25 # time between spawning another particle system
-EMITTER_TIMEOUT = 5*60
+EMITTER_TIMEOUT = 10*60
 CENTER_POS = Vec2d(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 BURST_PARTICLE_COUNT = 500
 TEXTURE = "images/pool_cue_ball.png"
@@ -35,6 +36,13 @@ DEFAULT_EMIT_INTERVAL = 0.003
 DEFAULT_EMIT_DURATION = 1.5
 
 
+##### Utils
+def sine_wave(t, min_x, max_x, wavelength):
+    spread = max_x - min_x
+    mid = (max_x + min_x) / 2
+    return (spread / 2) * math.sin( 2 * math.pi * t / wavelength) + mid
+
+##### Example emitters
 def emitter_0():
     """Burst, emit from center, particle lifetime 2 seconds"""
     e = arcade.Emitter(
@@ -257,7 +265,7 @@ def emitter_12():
     """Infinite emitting w/ eternal particle"""
     e = arcade.Emitter(
         pos=CENTER_POS,
-        rate_factory=arcade.EmitterInterval(0.005),
+        rate_factory=arcade.EmitterInterval(0.02),
         particle_factory=lambda emitter: arcade.EternalParticle(
             filename=TEXTURE,
             pos=Vec2d(emitter.center_x, emitter.center_y),
@@ -438,7 +446,7 @@ def emitter_22():
     """Interval, emit from center, velocity in fixed angle and speed"""
     e = arcade.Emitter(
         pos=CENTER_POS,
-        rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL * 8, DEFAULT_EMIT_DURATION),
+        rate_factory=arcade.EmitterIntervalWithTime(0.2, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename=TEXTURE,
             pos=CENTER_POS,
@@ -446,7 +454,7 @@ def emitter_22():
             angle=0,
             change_angle=0,
             scale=DEFAULT_SCALE,
-            alpha=DEFAULT_ALPHA,
+            alpha=128,
             lifetime=DEFAULT_PARTICLE_LIFETIME
         )
     )
@@ -648,6 +656,34 @@ def emitter_33():
         )
     )
     return emitter_33.__doc__, e
+
+def emitter_34():
+    """Moving emitter"""
+    class MovingEmitter(arcade.Emitter):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.elapsed = 0.0
+
+        def update(self):
+            super().update()
+            self.elapsed += 1 / 60
+            self.center_x = sine_wave(self.elapsed, 0, SCREEN_WIDTH, SCREEN_WIDTH / 100)
+            self.center_y = sine_wave(self.elapsed, 0, SCREEN_HEIGHT, SCREEN_HEIGHT / 100)
+
+    e = MovingEmitter(
+        pos=CENTER_POS,
+        rate_factory=arcade.EmitterInterval(0.005),
+        particle_factory=lambda emitter: arcade.FadeParticle(
+            filename=TEXTURE,
+            pos=Vec2d(emitter.center_x, emitter.center_y),
+            vel=arcade.rand_in_circle(Vec2d.zero(), 0.1),
+            angle=0,
+            change_angle=0,
+            scale=random.uniform(0.05, 0.2),
+            lifetime=random.uniform(1.5, 5.5)
+        )
+    )
+    return emitter_34.__doc__, e
 
 
 class MyGame(arcade.Window):
