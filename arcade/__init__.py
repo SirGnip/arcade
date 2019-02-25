@@ -34,3 +34,4 @@ from arcade.isometric import *
 from arcade.text import draw_text
 from arcade.text import create_text
 from arcade.text import render_text
+from arcade.examples.frametime_plotter import *

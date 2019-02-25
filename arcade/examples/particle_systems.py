@@ -9,8 +9,8 @@ python -m arcade.examples.sprite_list_particle_systems
 import arcade
 import pyglet
 from pymunk import Vec2d
+import os
 import random
-import frametime_plotter
 import math
 
 SCREEN_WIDTH = 800
@@ -689,6 +689,14 @@ def emitter_34():
 class MyGame(arcade.Window):
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+        # Set the working directory (where we expect to find files) to the same
+        # directory this .py file is in. You can leave this out of your own
+        # code, but it is needed to easily run the examples using "python -m"
+        # as mentioned at the top of this program.
+        file_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(file_path)
+
         arcade.set_background_color(arcade.color.BLACK)
 
         # collect particle factory functions
@@ -699,7 +707,7 @@ class MyGame(arcade.Window):
         self.emitter = None
         self.obj = arcade.Sprite("images/bumper.png", 0.2, center_x=0, center_y=15)
         self.obj.change_x = 3
-        self.frametime_plotter = frametime_plotter.FrametimePlotter()
+        self.frametime_plotter = arcade.FrametimePlotter()
         pyglet.clock.schedule_once(self.next_emitter, QUIET_BETWEEN_SPAWNS)
 
     def next_emitter(self, time_delta):
