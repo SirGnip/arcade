@@ -17,6 +17,7 @@ from arcade import color
 from arcade import key
 from arcade.application import *
 from arcade.arcade_types import *
+from arcade.utils import *
 from arcade.draw_commands import *
 from arcade.buffered_draw_commands import *
 from arcade.geometry import *
