@@ -131,3 +131,51 @@ class Emitter:
 
     def can_reap(self):
         return self.rate_factory.is_complete() and len(self._particles) <= 0
+
+
+########## Convenience functions that return pre-built emitters (A simple way for beginners to use particle systems)
+def make_burst_emitter(
+        pos: Vec2d,
+        filename_or_texture,
+        particle_count: int,
+        speed: float,  # range? (have speed and speed_range that represents a range around the given speed. If left empty, no range...  Or, "speed" and "speed_max". Just speed is a constant. speed+speed_max defines a range
+        particle_lifetime: float,  # range?
+        scale: float=1.0
+    ):
+    """Have a fade:boolean? """
+    return arcade.Emitter(
+        pos=pos,
+        rate_factory=arcade.EmitterBurst(particle_count),
+        particle_factory=lambda emitter: arcade.FadeParticle(
+            filename_or_texture=filename_or_texture,
+            pos=Vec2d(emitter.center_x, emitter.center_y),
+            vel=arcade.rand_in_circle(Vec2d.zero(), speed),
+            angle=0,
+            change_angle=0,
+            scale=scale,
+            lifetime=particle_lifetime
+        )
+    )
+
+def make_interval_emitter(
+        pos: Vec2d,
+        filename_or_texture,
+        emit_interval: float,
+        emit_duration: float,
+        speed: float, # range? (have speed and speed_range that represents a range around the given speed. If left empty, no range...  Or, "speed" and "speed_max". Just speed is a constant. speed+speed_max defines a range
+        particle_lifetime: float,  # range?
+        scale: float = 1.0
+    ):
+    return arcade.Emitter(
+        pos=pos,
+        rate_factory=arcade.EmitterIntervalWithTime(emit_interval, emit_duration),
+        particle_factory=lambda emitter: arcade.FadeParticle(
+            filename_or_texture=filename_or_texture,
+            pos=Vec2d(emitter.center_x, emitter.center_y),
+            vel=arcade.rand_on_circle(Vec2d.zero(), speed),
+            angle=0,
+            change_angle=0,
+            scale=scale,
+            lifetime=particle_lifetime
+        )
+    )

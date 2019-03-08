@@ -705,6 +705,30 @@ def emitter_35():
     )
     return emitter_35.__doc__, e
 
+def emitter_36():
+    """Pre-built burst emitter"""
+    emitter = arcade.make_burst_emitter(
+        pos=CENTER_POS,
+        filename_or_texture=TEXTURE,
+        particle_count=50,
+        speed=3.0,
+        particle_lifetime=1.0,
+    )
+    return emitter_36.__doc__, emitter
+
+def emitter_37():
+    """Pre-built burst emitter"""
+    emitter = arcade.make_interval_emitter(
+        pos=CENTER_POS,
+        filename_or_texture=TEXTURE,
+        emit_interval=0.01,
+        emit_duration=2.0,
+        speed=1.5,
+        particle_lifetime=3.0,
+        scale=0.1
+    )
+    return emitter_37.__doc__, emitter
+
 
 class MyGame(arcade.Window):
     def __init__(self):
@@ -762,7 +786,7 @@ class MyGame(arcade.Window):
             self.emitter.draw()
             arcade.draw_text("Particles: " + str(len(self.emitter._particles)), 10, 30, arcade.color.PALE_GOLD, 12)
 
-    def on_key_press(self, key, modifieers):
+    def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
