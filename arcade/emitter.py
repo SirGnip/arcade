@@ -96,7 +96,6 @@ class EmitterIntervalWithTime(EmitterController):
 class Emitter:
     def __init__(self, pos: Vec2d, rate_factory: EmitterController, particle_factory: Callable[["Emitter"], Particle]):
         # Note Self-reference with type annotations: https://www.python.org/dev/peps/pep-0484/#the-problem-of-forward-declarations
-        # super().__init__(filename=None, center_x=x, center_y=y)
         self.center_x = pos.x
         self.center_y = pos.y
         self.rate_factory = rate_factory
@@ -104,7 +103,10 @@ class Emitter:
         self._particles = arcade.SpriteList(use_spatial_hash=False)
 
     def _emit(self):
+        """Emit one particle. A particle's position is treated relative to the position of the emitter"""
         p = self.particle_factory(self)
+        p.center_x = self.center_x + p.center_x
+        p.center_y = self.center_y + p.center_y
         self._particles.append(p)
 
     def update(self):
@@ -148,7 +150,7 @@ def make_burst_emitter(
         rate_factory=arcade.EmitterBurst(particle_count),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=filename_or_texture,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), speed),
             angle=0,
             change_angle=0,
@@ -171,7 +173,7 @@ def make_interval_emitter(
         rate_factory=arcade.EmitterIntervalWithTime(emit_interval, emit_duration),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=filename_or_texture,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_on_circle(Vec2d.zero(), speed),
             angle=0,
             change_angle=0,

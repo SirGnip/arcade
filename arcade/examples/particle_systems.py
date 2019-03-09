@@ -51,7 +51,7 @@ def emitter_0():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -69,7 +69,7 @@ def emitter_1():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -87,7 +87,7 @@ def emitter_2():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -105,7 +105,7 @@ def emitter_3():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_in_circle(CENTER_POS, 100),
+            pos=arcade.rand_in_circle(Vec2d.zero(), 100),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -123,7 +123,7 @@ def emitter_4():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_on_circle(CENTER_POS, 100),
+            pos=arcade.rand_on_circle(Vec2d.zero(), 100),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -143,7 +143,7 @@ def emitter_5():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_in_rect(CENTER_POS + centering_offset, width, height),
+            pos=arcade.rand_in_rect(centering_offset, width, height),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -161,7 +161,7 @@ def emitter_6():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_on_line(Vec2d(0, 0), Vec2d(SCREEN_WIDTH, SCREEN_HEIGHT)),
+            pos=arcade.rand_on_line(Vec2d.zero(), Vec2d(SCREEN_WIDTH, SCREEN_HEIGHT)),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -179,7 +179,7 @@ def emitter_7():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT // 4),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_on_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -197,7 +197,7 @@ def emitter_8():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_rect(Vec2d(-2.0, -2.0), 4.0, 4.0),
             angle=0,
             change_angle=0,
@@ -215,7 +215,7 @@ def emitter_9():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT // 4),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_vec_magnitude(45, 1.0, 4.0),
             angle=0,
             change_angle=0,
@@ -233,7 +233,7 @@ def emitter_10():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT // 4),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_vec_spread_deg(90, 45, 2.0),
             angle=0,
             change_angle=0,
@@ -251,7 +251,7 @@ def emitter_11():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT // 4),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_on_line(Vec2d(-2, 1), Vec2d(2, 1)),
             angle=0,
             change_angle=0,
@@ -269,7 +269,7 @@ def emitter_12():
         rate_factory=arcade.EmitterInterval(0.02),
         particle_factory=lambda emitter: arcade.EternalParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -286,7 +286,7 @@ def emitter_13():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -304,7 +304,7 @@ def emitter_14():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -322,7 +322,7 @@ def emitter_15():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -340,7 +340,7 @@ def emitter_16():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_in_circle(CENTER_POS, 100),
+            pos=arcade.rand_in_circle(Vec2d.zero(), 100),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -358,7 +358,7 @@ def emitter_17():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_on_circle(CENTER_POS, 100),
+            pos=arcade.rand_on_circle(Vec2d.zero(), 100),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -378,7 +378,7 @@ def emitter_18():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_in_rect(CENTER_POS + centering_offset, width, height),
+            pos=arcade.rand_in_rect(centering_offset, width, height),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -392,11 +392,11 @@ def emitter_18():
 def emitter_19():
     """Interval, emit on line"""
     e = arcade.Emitter(
-        pos=CENTER_POS,
+        pos=Vec2d.zero(),
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=arcade.rand_on_line(Vec2d(0, 0), Vec2d(SCREEN_WIDTH, SCREEN_HEIGHT)),
+            pos=arcade.rand_on_line(Vec2d.zero(), Vec2d(SCREEN_WIDTH, SCREEN_HEIGHT)),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_SLOW),
             angle=0,
             change_angle=0,
@@ -414,7 +414,7 @@ def emitter_20():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_on_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -432,7 +432,7 @@ def emitter_21():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_rect(Vec2d(-2.0, -2.0), 4.0, 4.0),
             angle=0,
             change_angle=0,
@@ -450,7 +450,7 @@ def emitter_22():
         rate_factory=arcade.EmitterIntervalWithTime(0.2, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=Vec2d(1.0, 1.0),
             angle=0,
             change_angle=0,
@@ -468,7 +468,7 @@ def emitter_23():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL * 8, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_vec_magnitude(45, 1.0, 4.0),
             angle=0,
             change_angle=0,
@@ -486,7 +486,7 @@ def emitter_24():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_vec_spread_deg(90, 45, 2.0),
             angle=0,
             change_angle=0,
@@ -504,7 +504,7 @@ def emitter_25():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=CENTER_POS,
+            pos=Vec2d.zero(),
             vel=arcade.rand_on_line(Vec2d(-2, 1), Vec2d(2, 1)),
             angle=0,
             change_angle=0,
@@ -522,7 +522,7 @@ def emitter_26():
         rate_factory=arcade.EmitterIntervalWithCount(0.4, 5),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -540,7 +540,7 @@ def emitter_27():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL*5, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=random.choice((TEXTURE, TEXTURE2, TEXTURE3)),
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -558,7 +558,7 @@ def emitter_28():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL*5, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -576,7 +576,7 @@ def emitter_29():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL*5, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -594,7 +594,7 @@ def emitter_30():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL*5, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE2,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=45,
             change_angle=0,
@@ -612,7 +612,7 @@ def emitter_31():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL*5, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.LifetimeParticle(
             filename_or_texture=TEXTURE2,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=2,
@@ -630,7 +630,7 @@ def emitter_32():
         rate_factory=arcade.EmitterIntervalWithTime(DEFAULT_EMIT_INTERVAL, DEFAULT_EMIT_DURATION),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -648,7 +648,7 @@ def emitter_33():
         rate_factory=arcade.EmitterBurst(BURST_PARTICLE_COUNT),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=random.choice(textures),
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST),
             angle=0,
             change_angle=0,
@@ -667,7 +667,7 @@ def emitter_34():
         rate_factory=arcade.EmitterIntervalWithTime(0.01, 1.0),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=random.choice(textures),
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), PARTICLE_SPEED_FAST*2),
             angle=random.uniform(0, 360),
             change_angle=random.uniform(-3, 3),
@@ -695,7 +695,7 @@ def emitter_35():
         rate_factory=arcade.EmitterInterval(0.005),
         particle_factory=lambda emitter: arcade.FadeParticle(
             filename_or_texture=TEXTURE,
-            pos=Vec2d(emitter.center_x, emitter.center_y),
+            pos=Vec2d.zero(),
             vel=arcade.rand_in_circle(Vec2d.zero(), 0.1),
             angle=0,
             change_angle=0,
@@ -746,7 +746,7 @@ class MyGame(arcade.Window):
         # collect particle factory functions
         self.factories = [v for k, v in globals().items() if k.startswith("emitter_")]
 
-        self.emitter_factory_id = -1
+        self.emitter_factory_id = 18
         self.label = None
         self.emitter = None
         self.obj = arcade.Sprite("images/bumper.png", 0.2, center_x=0, center_y=15)
