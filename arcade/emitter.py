@@ -145,6 +145,37 @@ class Emitter:
         # TODO: should this be a property so a method call isn't needed?
         return self.center_x, self.center_y
 
+    def _emit_batch_original(self, emit_count):
+        idx = 0
+        particles = []
+        while idx < emit_count:
+            """Emit one particle. A particle's position is treated relative to the position of the emitter"""
+            p = self.particle_factory(self)
+            p.center_x = self.center_x + p.center_x
+            p.center_y = self.center_y + p.center_y
+            vel = Vec2d(p.change_x, p.change_y).rotated_degrees(self.angle)
+            p.change_x = vel.x
+            p.change_y = vel.y
+            particles.append(p)
+            idx += 1
+        self._particles.append_batch(particles)
+
+    def _emit_batch_preallocated_array(self, emit_count):
+        """Untested if this actually helps"""
+        particles = [None] * emit_count
+        for i in range(emit_count):
+            """Emit one particle. A particle's position is treated relative to the position of the emitter"""
+            p = self.particle_factory(self)
+            p.center_x = self.center_x + p.center_x
+            p.center_y = self.center_y + p.center_y
+            vel = Vec2d(p.change_x, p.change_y).rotated_degrees(self.angle)
+            p.change_x = vel.x
+            p.change_y = vel.y
+            particles[i] = p
+        self._particles.append_batch(particles)
+
+    _emit_batch = _emit_batch_original # easily flip between two implementations
+
     def update(self):
         # update emitter
         self.center_x += self.change_x
@@ -153,12 +184,11 @@ class Emitter:
 
         # update particles
         emit_count = self.rate_factory.how_many(1 / 60, len(self._particles))
-        for _ in range(emit_count):
-            self._emit()
+        self._emit_batch(emit_count)
         self._particles.update()
         particles_to_reap = [p for p in self._particles if p.can_reap()]
-        for dead_particle in particles_to_reap:
-            dead_particle.kill()
+        if len(particles_to_reap) > 0:
+            self._particles.remove_batch(particles_to_reap)
 
     def draw(self):
         self._particles.draw()
