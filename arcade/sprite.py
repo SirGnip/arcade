@@ -13,7 +13,8 @@ from arcade.draw_commands import load_texture
 from arcade.draw_commands import draw_texture_rectangle
 from arcade.draw_commands import Texture
 from arcade.draw_commands import rotate_point
-from arcade.arcade_types import RGB, Point
+from arcade.arcade_types import RGB
+from pymunk import Vec2d
 
 from typing import Sequence
 from typing import Tuple
@@ -132,6 +133,7 @@ class Sprite:
         self._scale = scale
         self._position = [center_x, center_y]
         self._angle = 0.0
+        self._forward = None
 
         self.velocity = [0, 0]
         self.change_angle = 0
@@ -165,6 +167,34 @@ class Sprite:
 
         """
         self.textures.append(texture)
+
+    # Simple relative motion (each individual method call moves the player)
+    def forward(self, dist: float):
+        # turn angle into a vector, multiply by given dist
+        vel = Vec2d(dist, 0.0)
+        vel.rotate_degrees(self.angle)
+        self.center_x += vel.x
+        self.center_y += vel.y
+    def backward(self, dist: float):
+        self.forward(-dist)
+    def turn_left(self, angle_delta: float):
+        self.angle += angle_delta
+    def turn_right(self, angle_delta: float):
+        self.angle -= angle_delta
+
+    # Continuous relative motion. The self._forward float is the speed (# of pixels-per-tick) the sprite will move in its "angle" direction
+    def move_fwd(self, dist: float):
+        self._forward = dist
+    def move_bak(self, dist: float):
+        self._forward = -dist
+    def move_stop(self):
+        self.change_x = 0
+        self.change_y = 0
+        self._forward = None
+    def move_left(self, ang: float):
+        self.change_angle += ang
+    def move_right(self, ang: float):
+        self.change_angle -= ang
 
     def _get_position(self) -> (float, float):
         """
@@ -646,6 +676,12 @@ class Sprite:
         """
         Update the sprite.
         """
+        if self._forward is not None:
+            vel = Vec2d(self._forward, 0.0)
+            vel.rotate_degrees(self.angle)
+            self.change_x = vel.x
+            self.change_y = vel.y
+
         self.position = [self._position[0] + self.change_x, self._position[1] + self.change_y]
         self.angle += self.change_angle
 
