@@ -2,6 +2,7 @@
 The main window class that all object-oriented applications should
 derive from.
 """
+from typing import Tuple, Type
 from numbers import Number
 from typing import Tuple, Union
 
@@ -359,22 +360,65 @@ def open_window(width: Number, height: Number, window_title: str, resizable: boo
     return _window
 
 
-class View:
-    """
-    TODO:Thoughts:
-    - is there a need for a close()/on_close() method?
-    """
-    def __init__(self):
-        self.window = None
+class WindowState:
+    def __init__(self, parent):
+        self.parent = parent
 
-    def update(self, delta_time):
-        """To be overridden"""
+    def setup(self):
+        """Called once after this WindowState object is created"""
         pass
+
+    def begin(self):
+        """Called each time this state becomes the current state"""
+        pass
+
+
+class WindowWithStates(Window):
+    def __init__(self, width: float = 800, height: float = 600,
+                 title: str = 'Arcade Window', fullscreen: bool = False,
+                 resizable: bool = False, update_rate=1 / 60,
+                 antialiasing=True):
+        super().__init__(width, height, title, fullscreen, resizable, update_rate, antialiasing)
+        self.current_state = None
+        self._screen_registry = {}
+
+    def set_state(self, new_state):
+        self.current_state = new_state
+        if self.current_state is not None:
+            self.current_state.setup()
+
+    def next_state(self, new_state_class: Type[WindowState], reset=False):
+        if reset or new_state_class.__name__ not in self._screen_registry:
+            self.current_state = new_state_class(self)
+            self._screen_registry[new_state_class.__name__] = self.current_state
+            if hasattr(self.current_state, 'setup'):
+                self.current_state.setup()
+        else:
+            self.current_state = self._screen_registry[new_state_class.__name__]
+        if hasattr(self.current_state, 'begin'):
+            self.current_state.begin()
 
     def on_update(self, delta_time):
-        """To be overridden"""
-        pass
+        if self.current_state and hasattr(self.current_state, 'on_update'):
+            self.current_state.on_update(delta_time)
 
-    def on_show(self):
-        """Called when this view is shown"""
-        pass
+    def update(self, delta_time):
+        if self.current_state and hasattr(self.current_state, 'update'):
+            self.current_state.update(delta_time)
+
+    def on_draw(self):
+        if self.current_state and hasattr(self.current_state, 'on_draw'):
+            self.current_state.on_draw()
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if self.current_state and hasattr(self.current_state, 'on_mouse_motion'):
+            self.current_state.on_mouse_motion(x, y, dx, dy)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        if self.current_state and hasattr(self.current_state, 'on_mouse_press'):
+            self.current_state.on_mouse_press(x, y, button, modifiers)
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if self.current_state and hasattr(self.current_state, 'on_key_press'):
+            self.current_state.on_key_press(symbol, modifiers)
+
