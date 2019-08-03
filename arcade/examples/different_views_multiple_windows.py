@@ -19,7 +19,7 @@ class GreenView(arcade.View):
         arcade.draw_xywh_rectangle_filled(100, 100, 50, 50, arcade.color.GREEN)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        PurpleView(self.parent).show()
+        self.parent.show_view(PurpleView())
         self.parent.click_count += 1
         print('click count', self.parent.click_count, id(self.parent))
 
@@ -30,7 +30,7 @@ class PurpleView(arcade.View):
         arcade.draw_xywh_rectangle_filled(100, 100, 50, 50, arcade.color.PURPLE)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        RedView(self.parent).show()
+        self.parent.show_view(RedView())
         self.parent.click_count += 1
         print('click count', self.parent.click_count, id(self.parent))
 
@@ -41,7 +41,7 @@ class RedView(arcade.View):
         arcade.draw_xywh_rectangle_filled(100, 100, 50, 50, arcade.color.RED)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        GreenView(self.parent).show()
+        self.parent.show_view(GreenView())
         self.parent.click_count += 1
         print('click count', self.parent.click_count, id(self.parent))
 
@@ -49,11 +49,11 @@ class RedView(arcade.View):
 win1 = arcade.WindowWithViews(WIDTH, HEIGHT, 'Win 1')
 win1.set_location(50, 100)
 win1.click_count = 0
-GreenView(win1).show()
+win1.show_view(GreenView())
 
 win2 = arcade.WindowWithViews(WIDTH, HEIGHT, 'Win 2')
 win2.set_location(WIDTH + 100, 100)
 win2.click_count = 0
-GreenView(win2).show()
+win2.show_view(GreenView())
 
 arcade.run()

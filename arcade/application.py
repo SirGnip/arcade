@@ -365,8 +365,8 @@ class View:
     TODO:Thoughts:
     - is there a need for a close()/on_close() method?
     """
-    def __init__(self, parent: Optional['WindowWithViews']=None):
-        self.parent = parent
+    def __init__(self):
+        self.parent = None
 
     def update(self, delta_time):
         """To be overridden"""
@@ -380,10 +380,6 @@ class View:
         """Called when this View is shown. Subclasses are expected to override this method."""
         pass
 
-    def show(self):
-        """Make this View the current View for the Window"""
-        self.parent.set_view(self)
-
 
 class WindowWithViews(Window):
     """Window that can change its View. This Window will forward events that it receives to the current View."""
@@ -394,10 +390,11 @@ class WindowWithViews(Window):
         super().__init__(width, height, title, fullscreen, resizable, update_rate, antialiasing)
         self.current_view = None
 
-    def set_view(self, view):
+    def show_view(self, view: Optional[View]=None):
         """Set the current view to the given """
         self.current_view = view
         if self.current_view is not None:
+            self.current_view.parent = self
             self.current_view.on_show()
 
     def on_update(self, delta_time):

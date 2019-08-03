@@ -33,7 +33,7 @@ class MenuView(arcade.View):
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, x, y, button, modifiers):
-        self.parent.set_view(None)  # have just the GameWindow visible with no View on top
+        self.parent.show_view(None)  # have just the GameWindow visible with no View on top
 
 
 class GameWindow(arcade.WindowWithViews):
@@ -83,7 +83,7 @@ class GameWindow(arcade.WindowWithViews):
     def on_key_press(self, key, modifiers):
         if not self.is_paused():
             if key == arcade.key.ESCAPE:
-                PauseView(self).show()
+                self.show_view(PauseView())
                 return
 
         super().on_key_press(key, modifiers)
@@ -117,15 +117,15 @@ class PauseView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:   # resume game
-            self.parent.set_view(None) # have just the GameWindow visible with no View on top
+            self.parent.show_view(None) # have just the GameWindow visible with no View on top
         elif key == arcade.key.ENTER:  # reset game
-            self.parent.set_view(None) # have just the GameWindow visible with no View on top
+            self.parent.show_view(None) # have just the GameWindow visible with no View on top
             self.parent.on_show()
 
 
 def main():
     window = GameWindow(WIDTH, HEIGHT, "Instruction and Game Over Views Example")
-    MenuView(window).show()
+    window.show_view(MenuView())
     arcade.run()
 
 

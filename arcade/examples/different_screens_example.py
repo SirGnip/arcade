@@ -40,7 +40,7 @@ class MenuView(arcade.View):
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, x, y, button, modifiers):
-        InstructionView(self.parent).show()
+        self.parent.show_view(InstructionView())
 
 
 class InstructionView(arcade.View):
@@ -55,13 +55,11 @@ class InstructionView(arcade.View):
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, x, y, button, modifiers):
-        GameView(self.parent).show()
+        self.parent.show_view(GameView())
 
 
 class GameView(arcade.View):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
+    def __init__(self):
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
@@ -122,7 +120,7 @@ class GameView(arcade.View):
         # If we've collected all the games, then move to a "GAME_OVER"
         # state.
         if len(self.coin_list) == 0:
-            GameOverView(self.parent).show()
+            self.parent.show_view(GameOverView())
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -154,12 +152,12 @@ class GameOverView(arcade.View):
                          anchor_x="center")
 
     def on_mouse_press(self, x, y, button, modifiers):
-        GameView(self.parent).show()
+        self.parent.show_view(GameView())
 
 
 def main():
     window = arcade.WindowWithViews(WIDTH, HEIGHT, "Instruction and Game Over Screens Example")
-    MenuView(window).show()
+    window.show_view(MenuView())
     arcade.run()
 
 
