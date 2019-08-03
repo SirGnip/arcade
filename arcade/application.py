@@ -2,6 +2,7 @@
 The main window class that all object-oriented applications should
 derive from.
 """
+from typing import Tuple, Optional
 from numbers import Number
 from typing import Tuple, Union
 
@@ -360,12 +361,12 @@ def open_window(width: Number, height: Number, window_title: str, resizable: boo
 
 
 class View:
-    """
+    """Represents an individual "view" of a WindowWithViews. WindowWithViews supports multiple Views, only one of which is active at a time.
     TODO:Thoughts:
     - is there a need for a close()/on_close() method?
     """
-    def __init__(self):
-        self.window = None
+    def __init__(self, parent: Optional['WindowWithViews']=None):
+        self.parent = parent
 
     def update(self, delta_time):
         """To be overridden"""
@@ -376,5 +377,58 @@ class View:
         pass
 
     def on_show(self):
-        """Called when this view is shown"""
+        """Called when this View is shown. Subclasses are expected to override this method."""
         pass
+
+    def show(self):
+        """Make this View the current View for the Window"""
+        self.parent.set_view(self)
+
+
+class WindowWithViews(Window):
+    """Window that can change its View. This Window will forward events that it receives to the current View."""
+    def __init__(self, width: float = 800, height: float = 600,
+                 title: str = 'Arcade Window', fullscreen: bool = False,
+                 resizable: bool = False, update_rate=1 / 60,
+                 antialiasing=True):
+        super().__init__(width, height, title, fullscreen, resizable, update_rate, antialiasing)
+        self.current_view = None
+
+    def set_view(self, view):
+        """Set the current view to the given """
+        self.current_view = view
+        if self.current_view is not None:
+            self.current_view.on_show()
+
+    def on_update(self, delta_time):
+        if self.current_view and hasattr(self.current_view, 'on_update'):
+            self.current_view.on_update(delta_time)
+
+    def update(self, delta_time):
+        if self.current_view and hasattr(self.current_view, 'update'):
+            self.current_view.update(delta_time)
+
+    def on_draw(self):
+        if self.current_view and hasattr(self.current_view, 'on_draw'):
+            self.current_view.on_draw()
+
+    def on_hide(self):
+        if self.current_view and hasattr(self.current_view, 'on_hide'):
+            self.current_view.on_hide()
+
+    def on_resize(self, width: float, height: float):
+        if self.current_view and hasattr(self.current_view, 'on_resize'):
+            self.current_view.on_resize(width, height)
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if self.current_view and hasattr(self.current_view, 'on_mouse_motion'):
+            self.current_view.on_mouse_motion(x, y, dx, dy)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        if self.current_view and hasattr(self.current_view, 'on_mouse_press'):
+            self.current_view.on_mouse_press(x, y, button, modifiers)
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if self.current_view and hasattr(self.current_view, 'on_key_press'):
+            self.current_view.on_key_press(symbol, modifiers)
+
